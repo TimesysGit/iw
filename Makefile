@@ -120,5 +120,3 @@ install: iw iw.8.gz
 	$(Q)$(MKDIR) $(DESTDIR)$(MANDIR)/man8/
 	$(Q)$(INSTALL) -m 644 iw.8.gz $(DESTDIR)$(MANDIR)/man8/
 
-clean:
-	$(Q)rm -f iw *.o *~ *.gz version.c *-stamp

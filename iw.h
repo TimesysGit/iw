@@ -61,6 +61,7 @@ struct cmd {
 };
 
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
+#undef DIV_ROUND_UP
 #define DIV_ROUND_UP(x, y) (((x) + (y - 1)) / (y))
 
 #define __COMMAND(_section, _symname, _name, _args, _nlcmd, _flags, _hidden, _idby, _handler, _help, _sel)\
@@ -165,6 +166,7 @@ enum print_ie_type {
 	PRINT_LINK,
 };
 
+#undef BIT
 #define BIT(x) (1ULL<<(x))
 
 void print_ies(unsigned char *ie, int ielen, bool unknown,

@@ -543,19 +543,20 @@ static int print_event(struct nl_msg *msg, void *arg)
 	}
 
 	fflush(stdout);
+
 	return NL_SKIP;
 }
 
-struct wait_event {
+struct wait_event_t {
 	int n_cmds;
 	const __u32 *cmds;
 	__u32 cmd;
 	struct print_event_args *pargs;
 };
 
-static int wait_event(struct nl_msg *msg, void *arg)
+static int local_wait_event(struct nl_msg *msg, void *arg)
 {
-	struct wait_event *wait = arg;
+	struct wait_event_t *wait = arg;
 	struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
 	int i;
 
@@ -622,7 +623,7 @@ __u32 __do_listen_events(struct nl80211_state *state,
 			 struct print_event_args *args)
 {
 	struct nl_cb *cb = nl_cb_alloc(iw_debug ? NL_CB_DEBUG : NL_CB_DEFAULT);
-	struct wait_event wait_ev;
+	struct wait_event_t wait_ev;
 
 	if (!cb) {
 		fprintf(stderr, "failed to allocate netlink callbacks\n");
@@ -636,7 +637,7 @@ __u32 __do_listen_events(struct nl80211_state *state,
 		wait_ev.cmds = waits;
 		wait_ev.n_cmds = n_waits;
 		wait_ev.pargs = args;
-		nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, wait_event, &wait_ev);
+		nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, local_wait_event, &wait_ev);
 	} else
 		nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, print_event, args);
 
